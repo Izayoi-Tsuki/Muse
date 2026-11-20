@@ -1,0 +1,114 @@
+{
+  "config": {
+    "paths": {
+      "raw": "data/raw",
+      "interim": "data/interim",
+      "tokenized": "data/tokenized",
+      "reports": "reports"
+    },
+    "sources": {
+      "animal_crossing": {
+        "glob": "animal_crossing/**/*.mid",
+        "tag": "ac",
+        "sample_weight": 4.0,
+        "augment": true
+      },
+      "pop909": {
+        "glob": "pop909/POP909/*/*.mid",
+        "tag": "pop",
+        "sample_weight": 1.0,
+        "augment": true
+      },
+      "lakh": {
+        "glob": "lakh/lmd_full/*.mid",
+        "tag": "lakh",
+        "sample_weight": 0.5,
+        "augment": false,
+        "max_files": 5000,
+        "seed": 42
+      }
+    },
+    "filter": {
+      "min_notes": 32,
+      "min_duration_sec": 20,
+      "max_duration_sec": 480,
+      "min_tempo": 40,
+      "max_tempo": 180,
+      "allowed_time_signatures": [
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          12,
+          8
+        ]
+      ],
+      "max_tracks": 16,
+      "lakh_chill": {
+        "min_tempo": 55,
+        "max_tempo": 140,
+        "max_notes_per_sec": 12
+      }
+    },
+    "normalize": {
+      "tpq": 480,
+      "grid_per_beat": 4,
+      "pitch_range": [
+        21,
+        108
+      ],
+      "key_norm": true,
+      "instrument_map": {
+        "piano": 0,
+        "guitar": 24,
+        "bass": 32,
+        "mallet": 12,
+        "strings": 48
+      },
+      "keep_top_tracks": 6
+    },
+    "augment": {
+      "copies": 2,
+      "transpose_range": [
+        -3,
+        3
+      ],
+      "seed": 42
+    },
+    "tokenizer": {
+      "scheme": "REMI",
+      "num_velocities": 32,
+      "special_tokens": [
+        "PAD",
+        "BOS",
+        "EOS"
+      ]
+    },
+    "split": {
+      "val_ratio": 0.05,
+      "test_ratio": 0.05,
+      "seed": 42
+    }
+  },
+  "n_songs": 6243,
+  "n_sequences": 8705,
+  "vocab_size": 388,
+  "split_sizes": {
+    "train": 7823,
+    "val": 448,
+    "test": 434
+  }
+}

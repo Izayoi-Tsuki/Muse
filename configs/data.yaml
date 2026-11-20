@@ -1,0 +1,68 @@
+# M1 数据管线配置
+paths:
+  raw: data/raw
+  interim: data/interim      # 清洗后的 MIDI（基础版，未增广）
+  tokenized: data/tokenized  # REMI token 序列 + 划分
+  reports: reports
+
+sources:
+  animal_crossing:
+    glob: "animal_crossing/**/*.mid"
+    tag: ac
+    sample_weight: 4.0       # 训练时的上采样权重（M2 用）
+    augment: true
+  pop909:
+    glob: "pop909/POP909/*/*.mid"
+    tag: pop
+    sample_weight: 1.0
+    augment: true
+  lakh:
+    glob: "lakh/lmd_full/*.mid"
+    tag: lakh
+    sample_weight: 0.5
+    augment: false
+    max_files: 5000          # 风格过滤后保留的上限
+    seed: 42
+
+filter:
+  min_notes: 32
+  min_duration_sec: 20
+  max_duration_sec: 480
+  min_tempo: 40
+  max_tempo: 180
+  allowed_time_signatures: [[4, 4], [3, 4], [2, 4], [6, 8], [12, 8]]
+  max_tracks: 16
+  # Lakh 额外的"休闲风格"过滤
+  lakh_chill:
+    min_tempo: 55
+    max_tempo: 140
+    max_notes_per_sec: 12
+
+normalize:
+  tpq: 480                   # 重采样目标 ticks/quarter
+  grid_per_beat: 4           # 1/16 拍量化
+  pitch_range: [21, 108]
+  key_norm: true             # Krumhansl 估调 -> C 大调 / a 小调
+  # GM program -> 小编制映射（ensemble 名, 目标 program）
+  instrument_map:
+    piano: 0                 # 钢琴/organ/synth lead 等 -> Acoustic Grand
+    guitar: 24               # 吉他族 -> Acoustic Guitar(nylon)
+    bass: 32                 # 贝斯族 -> Acoustic Bass
+    mallet: 12               # 色彩打击/钟琴族 -> Marimba
+    strings: 48              # 弦乐/合唱/铜管木管 -> String Ensemble 1
+  keep_top_tracks: 6         # 非鼓轨按音符数保留上限
+
+augment:
+  copies: 2                  # 每首额外移调副本数（不含原调）
+  transpose_range: [-3, 3]
+  seed: 42
+
+tokenizer:
+  scheme: REMI
+  num_velocities: 32
+  special_tokens: [PAD, BOS, EOS]
+
+split:
+  val_ratio: 0.05
+  test_ratio: 0.05
+  seed: 42

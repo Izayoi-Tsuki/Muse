@@ -1,0 +1,52 @@
+# 原始数据、中间 MIDI 与训练序列仅保留本地。
+/data/*
+!/data/tokenized/
+/data/tokenized/*
+!/data/tokenized/tokenizer.json
+!/data/tokenized/vocab.json
+!/data/tokenized/manifest.json
+
+# 模型检查点、训练日志和第三方工具。
+/checkpoints/
+/logs/
+/tools/
+/.inspect/
+
+# 只发布已验收的两段试听，避免后续生成文件意外入库。
+/samples/*
+!/samples/gen_000.mid
+!/samples/gen_000.wav
+!/samples/gen_001.mid
+!/samples/gen_001.wav
+
+# Python 虚拟环境、缓存与构建产物。
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# 本地 IDE 设置、系统文件和备份。
+.qoder/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+/backups/
+*.bak
+
+# 凭据文件不进入版本控制。
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
